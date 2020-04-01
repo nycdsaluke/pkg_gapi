@@ -131,3 +131,7 @@ dmypy.json
 # MAC
 .DS_Store
 
+# credentials
+credentials.json
+token.pickle
+
