@@ -6,7 +6,7 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
 
 
-def get_drive_cred(cred_path):
+def get_gapi_cred(cred_path):
     """
     Shows basic usage of the Drive v3 API.
     Prints the names and ids of the first 10 files the user has access to.
@@ -42,20 +42,25 @@ def get_drive_cred(cred_path):
 
 
 def get_drive_service(cred_path):
-    creds = get_drive_cred(cred_path)
+    creds = get_gapi_cred(cred_path)
     dservice = build('drive', 'v3', credentials=creds)
 
     return dservice
 
 
 def get_sheet_service(cred_path):
-    creds = get_drive_cred(cred_path)
+    creds = get_gapi_cred(cred_path)
     sservice = build('sheets', 'v4', credentials=creds)
 
     return sservice
 
 def get_mail_service(cred_path):
-    creds = get_drive_cred(cred_path)
+    creds = get_gapi_cred(cred_path)
     mservice = build('gmail', 'v1', credentials=creds)
 
     return mservice
+
+
+if __name__ == "__main__":
+    cred_path = "/Users/lukelin/Desktop/pkg_gapi/sample_exam/creds"
+    print(get_drive_service(cred_path))

@@ -130,8 +130,11 @@ dmypy.json
 
 # MAC
 .DS_Store
+.idea
 
 # credentials
 credentials.json
 token.pickle
 
+# use cases/projects
+attendance
