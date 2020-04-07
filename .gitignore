@@ -138,3 +138,9 @@ token.pickle
 
 # use cases/projects
 attendance
+
+# data
+*.csv
+
+# configs
+configs.py

@@ -17,7 +17,9 @@ def get_gapi_cred(cred_path):
     """
     SCOPES = [
         "https://www.googleapis.com/auth/gmail.compose",
-        "https://www.googleapis.com/auth/drive"
+        "https://www.googleapis.com/auth/drive",
+        "https://www.googleapis.com/auth/calendar.readonly",
+        "https://www.googleapis.com/auth/spreadsheets.readonly"
     ]
     creds = None
     # The file token.pickle stores the user's access and refresh tokens, and is
@@ -53,6 +55,12 @@ def get_sheet_service(cred_path):
     sservice = build('sheets', 'v4', credentials=creds)
 
     return sservice
+
+def get_calendar_service(cred_path):
+    creds = get_gapi_cred(cred_path)
+    dservice = build('calendar', 'v3', credentials=creds)
+
+    return dservice
 
 def get_mail_service(cred_path):
     creds = get_gapi_cred(cred_path)
