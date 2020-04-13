@@ -78,7 +78,7 @@ def get_daily_events(cred_path, rooms, date_today, exclude_events_for_day=True):
             events_df[col] = events_df[col].apply(lambda x: x.replace(tzinfo=None))
 
 
-        events_df["Room"] = room
+        events_df["Zoom"] = room
         lst_event_dfs.append(events_df)
 
     return pd.concat(lst_event_dfs).reset_index(drop=True)

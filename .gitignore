@@ -137,7 +137,7 @@ credentials.json
 token.pickle
 
 # use cases/projects
-attendance
+bds*
 
 # data
 *.csv

@@ -45,6 +45,32 @@ def file2lcl_folder(cred_path, file_id, local_folder):
     return done
 
 
+def update_sheet(cred_path, spredsheet_id, sheet_name, values):
+    sservice = get_sheet_service(cred_path)
+    value_input_option="USER_ENTERED"
+
+    body = {
+        'values': values
+    }
+    sservice.spreadsheets().values().update(
+        spreadsheetId=spredsheet_id, range=sheet_name,
+        valueInputOption=value_input_option, body=body).execute()
+
+
+def rm_sheet_from_workbook(cred_path, spreadsheet_id, sheet_id):
+    sservice = get_sheet_service(cred_path)
+
+    requests = []
+    requests.append({'deleteSheet': {"sheetId": sheet_id}})
+
+    body = {
+        'requests': requests
+    }
+    sservice.spreadsheets().batchUpdate(
+        spreadsheetId=spreadsheet_id,
+        body=body).execute()
+
+
 def get_google_sheet(cred_path, spreadsheet_id, range_name):
     sservice = get_sheet_service(cred_path)
 
@@ -130,16 +156,39 @@ def share_folder(cred_path, file_id, share_lst, msg=""):
     batch.execute()
 
 
-def uploadFile(cred_path, local_file_name, parent_id, remote_file_name):
+def uploadFile(cred_path, local_file_name, parent_id, remote_file_name, mimetype="*/*", mimeType="*/*"):
     dservice = get_drive_service(cred_path)
 
     file_metadata = {
     'name': remote_file_name,
-    'mimeType': '*/*',
+    'mimeType': mimeType,
     "parents": [parent_id]
     }
     media = MediaFileUpload(local_file_name,
-                            mimetype='*/*',
+                            mimetype=mimetype,
                             resumable=True)
     file = dservice.files().create(body=file_metadata, media_body=media, fields='id').execute()
-    print ('File ID: ' + file.get('id'))
+    return file.get('id')
+
+
+def uploadCSV(cred_path, local_file_name, parent_id, remote_file_name):
+    fid = uploadFile(cred_path, local_file_name, parent_id, remote_file_name,
+               mimetype="text/csv", mimeType="application/vnd.google-apps.spreadsheet")
+
+    return fid
+
+
+def list_objects_by_name(cred_path, parent_id, name):
+    collected = [
+        d for d in list_files(cred_path, parent_id) if d["name"] == name]
+    return collected
+
+
+def fetch_or_create(cred_path, parent_id, name):
+    collected = list_objects_by_name(cred_path, parent_id, name)
+    if len(collected) == 0:
+        collected = create_new_folder(cred_path, name, parent_id)
+    else:
+        collected = collected[0]
+
+    return collected["id"]
